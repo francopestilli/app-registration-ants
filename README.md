@@ -1,5 +1,45 @@
 # 3D MRI Registration
 
+<!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
+
+> **Registers a T2-weighted image to a T1-weighted reference with ANTs using translation, rigid, affine and optional SyN stages, outputting the transforms and the registered T2w.**
+
+Runs antsRegistration from the moving image to the fixed image up to the selected transformation stage, with the pyramid depth set by settings, and applies the result to the moving image. Use it to bring a subject's T2w into its T1w space (or for inter-subject normalisation). The README describes the T1w-to-T1w variant of the same code.
+
+| | |
+|---|---|
+| 📥 **Inputs** | `neuro/anat/t2w` · `neuro/anat/t1w` |
+| 📤 **Outputs** | `neuro/transform/nifti` · `neuro/anat/t2w` |
+| 🐳 **Container** | `brainlife/ants:2.2.0-1bc` |
+| ⚙️ **Resources** | 1 CPUs · 2 h walltime |
+| 🔗 **Run it** | [doi.org/10.25663/brainlife.app.877](https://doi.org/10.25663/brainlife.app.877) |
+
+#### 📥 Inputs
+
+| Input | Datatype | Required | Description |
+|---|---|---|---|
+| `t2_moving` | `neuro/anat/t2w` | yes | T2-weighted image to register (moving). |
+| `t1_fixed` | `neuro/anat/t1w` | yes | T1-weighted image used as the fixed reference. |
+
+#### 📤 Outputs
+
+| Output | Datatype | Description |
+|---|---|---|
+| `transformations` | `neuro/transform/nifti` | ANTs affine matrix and warp fields from the T2w to the T1w space. |
+| `transformed` | `neuro/anat/t2w` | T2-weighted image resampled into the T1w reference space. |
+
+<details>
+<summary><b>⚙️ Parameters</b> (2)</summary>
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `settings` | enum | `4` | The `settings` parameter controls the depth of the multiresolution (pyramidal) registration strategy used by ANTs. Higher settings correspond to more levels in the registration pyramid, starting from coarse alignment and progressively refining toward finer spatial correspondence. Options: `1`, `2`, `3`, `4`. |
+| `transformation` | enum | `nonlinear` | Highest registration stage to run: translation, rigid, affine or nonlinear (SyN); each stage includes the previous ones. Options: `translation`, `rigid`, `affine`, `nonlinear`. |
+
+</details>
+
+<!-- brainlife-app:end -->
+
 An automated and reproducible pipeline to perform image registration between two 3D MRI scans using ANTs. This tool ensures high-precision alignment through a multi-stage transformation process suitable for intra-subject longitudinal studies or inter-subject normalization workflows.
 
 ---
